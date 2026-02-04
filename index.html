@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quick Quiz ❤️</title>
+
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(135deg, #ff758c, #ffb3c6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+  }
+
+  .card {
+    background: white;
+    width: 90%;
+    max-width: 360px;
+    padding: 30px;
+    border-radius: 22px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: pop 0.8s ease;
+  }
+
+  h1 {
+    font-size: 22px;
+    color: #ff3366;
+    margin-bottom: 25px;
+    line-height: 1.4;
+  }
+
+  button {
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    background: #ff3366;
+    color: white;
+    transition: 0.3s;
+  }
+
+  button:hover {
+    transform: scale(1.05);
+  }
+
+  .val-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .val-buttons button {
+    width: auto;
+    padding: 12px 26px;
+  }
+
+  #no {
+    background: #e0e0e0;
+    color: #333;
+    position: relative;
+  }
+
+  .heart {
+    position: absolute;
+    font-size: 28px;
+    animation: fly 2s ease forwards;
+  }
+
+  @keyframes pop {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+
+  @keyframes fly {
+    0% { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-220px) scale(1.5); opacity: 0; }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card"></div>
+
+<script>
+  const card = document.getElementById("card");
+  let step = 0;
+  let score = 0;
+
+  const quiz = [
+    {
+      q: "When did we meet for the first time? 👀",
+      options: ["6 Aug", "4 Aug", "18 Aug", "14 Aug"],
+      correct: "18 Aug"
+    },
+    {
+      q: "What’s my favourite colour? 🎨",
+      options: ["Black", "Blue", "Yellow", "White"],
+      correct: "Blue"
+    },
+    {
+      q: "Who’s my favourite person? 😌❤️",
+      options: [
+        "You 😌",
+        "Definitely you 😄",
+        "Obviously you ❤️",
+        "No doubt — YOU 🫶"
+      ],
+      correct: "You 😌"
+    }
+  ];
+
+  function loadQuestion() {
+    const q = quiz[step];
+    card.innerHTML = `<h1>${q.q}</h1>`;
+    q.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.innerText = opt;
+      btn.onclick = () => checkAnswer(opt);
+      card.appendChild(btn);
+    });
+  }
+
+  function checkAnswer(selected) {
+    if (selected === quiz[step].correct) score++;
+    step++;
+    step < quiz.length ? loadQuestion() : showResult();
+  }
+
+  function showResult() {
+    if (score === quiz.length) {
+      showValentine();
+    } else {
+      card.innerHTML = `
+        <h1>
+          Oops 😅❤️<br><br>
+          Looks like someone needs a revision!<br>
+          Better luck next time 😉
+        </h1>
+      `;
+    }
+  }
+
+  function showValentine() {
+    card.innerHTML = `
+      <h1>
+        Krutika babyyy 🧑🏻‍🍼<br>
+        I was wondering…<br><br>
+        will you be my Valentine? ❤️
+      </h1>
+      <div class="val-buttons">
+        <button id="yes">Yes ❤️</button>
+        <button id="no">No 🙈</button>
+      </div>
+    `;
+
+    document.getElementById("yes").onclick = yesClicked;
+    document.getElementById("no").onmouseover = moveNo;
+    document.getElementById("no").ontouchstart = moveNo;
+  }
+
+  function moveNo() {
+    const x = Math.random() * 160 - 80;
+    const y = Math.random() * 160 - 80;
+    this.style.transform = `translate(${x}px, ${y}px)`;
+  }
+
+  function yesClicked() {
+    card.innerHTML = `
+      <h1>
+        YAYYY ❤️😍<br>
+        You just made my day!
+      </h1>
+    `;
+    for (let i = 0; i < 18; i++) createHeart();
+  }
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤️";
+    heart.style.left = Math.random() * window.innerWidth + "px";
+    heart.style.bottom = "0px";
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 2000);
+  }
+
+  loadQuestion();
+</script>
+
+</body>
+</html>
